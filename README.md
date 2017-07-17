@@ -19,8 +19,8 @@
         }).start();
     }
 ```
-
-这是因为你的Thread执行的时候，ViewRootImpl还没有对view tree的根节点DecorView执行performTraversals，view tree里的所有View都没有被赋值mAttachInfo。在onCreate完成时，Activity并没有完成初始化view tree。view tree的初始化是从ViewRootImpl执行performTraversals开始，这个过程会对view tree进行从根节点DecorView开始的遍历，对所有视图完成初始化，初始化包括视图的大小布局，以及AttachInfo，ViewParent等域的初始化。执行ImageView.setImageResource，调用的过程是ImageView.setImageResource </br>
+### 首先在onCreate方法中创建的子线程访问UI是一种极端的情况，如果让线程休眠300ms,程序就会崩掉</br>
+之所以没有崩溃，这是因为你的Thread执行的时候，ViewRootImpl（ViewRootImpl是ViewRoot的实现类）还没有对view tree的根节点DecorView执行performTraversals，view tree里的所有View都没有被赋值mAttachInfo。在onCreate完成时，Activity并没有完成初始化view tree。view tree的初始化是从ViewRootImpl执行performTraversals开始，这个过程会对view tree进行从根节点DecorView开始的遍历，对所有视图完成初始化，初始化包括视图的大小布局，以及AttachInfo，ViewParent等域的初始化。执行ImageView.setImageResource，调用的过程是ImageView.setImageResource </br>
 -> View.invalidate </br>
 -> View.invalidateInternal </br>
 -> ViewGroup.invalidateChild</br>
@@ -37,7 +37,7 @@ if (p != null && ai != null && l < r && t < b) {
 }
 ```
 也就是说，此时因为不存在ViewParent，invalidate的过程中止而没有完全执行，也即没有发生checkThread。
-
+（参考自知乎）
 ```java
  void checkThread() {
         if (mThread != Thread.currentThread()) {
@@ -46,3 +46,4 @@ if (p != null && ai != null && l < r && t < b) {
         }
     }
 ```
+ 另：http://www.cnblogs.com/xuyinhuan/p/5930287.html 中有很详细深入的讲解
