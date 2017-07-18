@@ -27,27 +27,28 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        //当点击会崩溃
+
         // 可通过handler发生消息、 handler.post(Runnable r)、view.post(Runnable r)、activity.runOnUIThread(Runnable r)等方法来通知主线程更新UI
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tv.setText("子线程真的可以更新UI吗?");
-                    }
-                }).start();
+                //子线程点击会崩溃
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        tv.setText("子线程真的可以更新UI吗?");
+//                    }
+//                }).start();
 
                 /**
                  * === handler.post(Runnable r) ===
                  */
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        mHandler.sendEmptyMessage(100);
-//                    }
-//                }).start();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mHandler.sendEmptyMessage(100);
+                    }
+                }).start();
 
                 /**
                  * === handler.post(Runnable r) ===
