@@ -21,9 +21,11 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                tv.setText("子线程可以更新UI");
+                tv.setText("子线程可以更新UI吗");
             }
         }).start();
+
+
 
         //当点击会崩溃
         // 可通过handler发生消息、 handler.post(Runnable r)、view.post(Runnable r)、activity.runOnUIThread(Runnable r)等方法来通知主线程更新UI
