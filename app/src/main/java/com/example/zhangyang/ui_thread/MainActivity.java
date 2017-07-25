@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        // 可通过handler发生消息、 handler.post(Runnable r)、view.post(Runnable r)、activity.runOnUIThread(Runnable r)等方法来通知主线程更新UI
+        // 可通过handler发送消息、 handler.post(Runnable r)、view.post(Runnable r)、activity.runOnUIThread(Runnable r)等方法来通知主线程更新UI
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 //                }).start();
 
                 /**
-                 * === handler.post(Runnable r) ===
+                 * === handler发送消息 ===
                  */
                 new Thread(new Runnable() {
                     @Override
