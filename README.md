@@ -20,7 +20,8 @@
     }
 ```
 ### 首先在onCreate方法中创建的子线程访问UI是一种极端的情况，如果让线程休眠300ms,程序就会崩掉</br>
-之所以没有崩溃，这是因为你的Thread执行的时候，ViewRootImpl（ViewRootImpl是ViewRoot的实现类）还没有对view tree的根节点DecorView执行performTraversals，view tree里的所有View都没有被赋值mAttachInfo。在onCreate完成时，Activity并没有完成初始化view tree。view tree的初始化是从ViewRootImpl执行performTraversals开始，这个过程会对view tree进行从根节点DecorView开始的遍历，对所有视图完成初始化，初始化包括视图的大小布局，以及AttachInfo，ViewParent等域的初始化。执行ImageView.setImageResource，调用的过程是ImageView.setImageResource </br>
+之所以没有崩溃，这是因为你的Thread执行的时候，ViewRootImpl（ViewRootImpl是ViewRoot的实现类）还没有对view tree的根节点DecorView执行performTraversals，view tree里的所有View都没有被赋值mAttachInfo。在onCreate完成时，Activity并没有完成初始化view tree。view tree的初始化是从ViewRootImpl执行performTraversals开始，这个过程会对view tree进行从根节点DecorView开始的遍历，对所有视图完成初始化，初始化包括视图的大小布局，以及AttachInfo，ViewParent等域的初始化。 ViewRootImpl的创建在onResume方法回调之后，而我们一开篇是在onCreate方法中创建了子线程并访问UI，在那个时刻，ViewRootImpl是没有创建的，无法检测当前线程是否是UI线程，所以程序没有崩溃一样能跑起来。</br>
+执行ImageView.setImageResource，调用的过程是ImageView.setImageResource </br>
 -> View.invalidate </br>
 -> View.invalidateInternal </br>
 -> ViewGroup.invalidateChild</br>
